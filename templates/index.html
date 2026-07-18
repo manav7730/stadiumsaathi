@@ -41,17 +41,17 @@
       <p class="hero-sub">One GenAI command layer. Three views into the same match day.</p>
 
       <div class="persona-grid" role="list" aria-label="Choose your role">
-        <button class="persona-card" onclick="enterPersona('fan')" role="listitem" aria-label="Enter Fan view">
+        <button id="btn-persona-fan" class="persona-card" role="listitem" aria-label="Enter Fan view">
           <span class="persona-icon" aria-hidden="true">🎟️</span>
           <span class="persona-name">Fan</span>
           <span class="persona-desc">Navigate, ask questions, avoid the crowds</span>
         </button>
-        <button class="persona-card" onclick="enterPersona('volunteer')" role="listitem" aria-label="Enter Volunteer view">
+        <button id="btn-persona-volunteer" class="persona-card" role="listitem" aria-label="Enter Volunteer view">
           <span class="persona-icon" aria-hidden="true">🦺</span>
           <span class="persona-name">Volunteer</span>
           <span class="persona-desc">Report incidents, get instant triage guidance</span>
         </button>
-        <button class="persona-card" onclick="enterPersona('command')" role="listitem" aria-label="Enter Command Center view">
+        <button id="btn-persona-command" class="persona-card" role="listitem" aria-label="Enter Command Center view">
           <span class="persona-icon" aria-hidden="true">📡</span>
           <span class="persona-name">Command Center</span>
           <span class="persona-desc">Live zone density, AI operational calls</span>
@@ -67,7 +67,7 @@
   ══════════════════════════════════════════════════════════════ -->
   <div id="fan-view" class="persona-view" style="display:none" role="main" aria-label="Fan assistant">
     <header class="app-header">
-      <button class="back-btn" onclick="goHome()" aria-label="Back to persona selection">← Back</button>
+      <button class="back-btn" aria-label="Back to persona selection">← Back</button>
       <div class="app-title">🎟️ Fan Assistant</div>
       <div class="header-spacer"></div>
     </header>
@@ -103,7 +103,7 @@
               </select>
             </div>
           </div>
-          <button class="btn btn-primary" onclick="startFanSession()">Check In</button>
+          <button id="btn-checkin-fan" class="btn btn-primary">Check In</button>
         </div>
       </section>
 
@@ -117,7 +117,7 @@
 
         <div class="chat-input-row">
           <input type="text" id="fan-input" placeholder="Ask Saathi anything..." aria-label="Type your question" />
-          <button class="btn btn-primary" onclick="sendFanMessage()">Send</button>
+          <button id="btn-send-fan" class="btn btn-primary">Send</button>
         </div>
       </section>
     </main>
@@ -128,7 +128,7 @@
   ══════════════════════════════════════════════════════════════ -->
   <div id="volunteer-view" class="persona-view" style="display:none" role="main" aria-label="Volunteer incident assistant">
     <header class="app-header">
-      <button class="back-btn" onclick="goHome()" aria-label="Back to persona selection">← Back</button>
+      <button class="back-btn" aria-label="Back to persona selection">← Back</button>
       <div class="app-title">🦺 Volunteer Console</div>
       <div class="header-spacer"></div>
     </header>
@@ -157,7 +157,7 @@
               <select id="vol-zone"></select>
             </div>
           </div>
-          <button class="btn btn-primary" onclick="startVolunteerSession()">Sign In</button>
+          <button id="btn-signin-volunteer" class="btn btn-primary">Sign In</button>
         </div>
       </section>
 
@@ -165,18 +165,18 @@
         <div class="report-card">
           <h2 class="setup-title">Report an Incident</h2>
           <div class="incident-type-grid" role="list" aria-label="Incident type">
-            <button class="incident-btn active" data-type="medical" onclick="selectIncidentType('medical')" role="listitem">🚑 Medical</button>
-            <button class="incident-btn" data-type="lost_child" onclick="selectIncidentType('lost_child')" role="listitem">🧒 Lost Child</button>
-            <button class="incident-btn" data-type="overcrowding" onclick="selectIncidentType('overcrowding')" role="listitem">👥 Overcrowding</button>
-            <button class="incident-btn" data-type="security" onclick="selectIncidentType('security')" role="listitem">🛡️ Security</button>
-            <button class="incident-btn" data-type="facility" onclick="selectIncidentType('facility')" role="listitem">🔧 Facility</button>
-            <button class="incident-btn" data-type="other" onclick="selectIncidentType('other')" role="listitem">📋 Other</button>
+            <button class="incident-btn active" data-type="medical" role="listitem">🚑 Medical</button>
+            <button class="incident-btn" data-type="lost_child" role="listitem">🧒 Lost Child</button>
+            <button class="incident-btn" data-type="overcrowding" role="listitem">👥 Overcrowding</button>
+            <button class="incident-btn" data-type="security" role="listitem">🛡️ Security</button>
+            <button class="incident-btn" data-type="facility" role="listitem">🔧 Facility</button>
+            <button class="incident-btn" data-type="other" role="listitem">📋 Other</button>
           </div>
           <div class="form-field">
             <label for="incident-desc">What's happening? (optional details)</label>
             <textarea id="incident-desc" rows="3" placeholder="Brief description..." maxlength="500"></textarea>
           </div>
-          <button class="btn btn-primary" onclick="reportIncident()">Get AI Guidance</button>
+          <button id="btn-report-incident" class="btn btn-primary">Get AI Guidance</button>
         </div>
 
         <div id="triage-result" aria-live="polite" aria-label="AI triage guidance"></div>
@@ -189,7 +189,7 @@
   ══════════════════════════════════════════════════════════════ -->
   <div id="command-view" class="persona-view" style="display:none" role="main" aria-label="Command center dashboard">
     <header class="app-header">
-      <button class="back-btn" onclick="goHome()" aria-label="Back to persona selection">← Back</button>
+      <button class="back-btn" aria-label="Back to persona selection">← Back</button>
       <div class="app-title">📡 Command Center</div>
       <div class="live-badge" aria-label="Live status indicator">
         <span class="live-dot" aria-hidden="true"></span> LIVE
@@ -205,7 +205,7 @@
       <section class="rec-section" aria-label="AI recommendations">
         <h2 class="section-title">AI Recommendations</h2>
         <div id="ai-recommendations" aria-live="polite"></div>
-        <button class="btn btn-secondary" onclick="refreshRecommendations()">Refresh Analysis</button>
+        <button id="btn-refresh-recs" class="btn btn-secondary">Refresh Analysis</button>
       </section>
 
       <section class="incidents-section" aria-label="Live incident log">

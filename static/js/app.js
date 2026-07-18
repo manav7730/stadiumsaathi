@@ -26,7 +26,30 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('fan-input')?.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendFanMessage();
   });
+
+  // Persona selections
+  document.getElementById('btn-persona-fan')?.addEventListener('click', () => enterPersona('fan'));
+  document.getElementById('btn-persona-volunteer')?.addEventListener('click', () => enterPersona('volunteer'));
+  document.getElementById('btn-persona-command')?.addEventListener('click', () => enterPersona('command'));
+
+  // Back buttons
+  document.querySelectorAll('.back-btn').forEach(btn => {
+    btn.addEventListener('click', goHome);
+  });
+
+  // Check In and Action buttons
+  document.getElementById('btn-checkin-fan')?.addEventListener('click', startFanSession);
+  document.getElementById('btn-send-fan')?.addEventListener('click', () => sendFanMessage());
+  document.getElementById('btn-signin-volunteer')?.addEventListener('click', startVolunteerSession);
+  document.getElementById('btn-report-incident')?.addEventListener('click', reportIncident);
+  document.getElementById('btn-refresh-recs')?.addEventListener('click', refreshRecommendations);
+
+  // Incident type buttons
+  document.querySelectorAll('.incident-btn').forEach(btn => {
+    btn.addEventListener('click', () => selectIncidentType(btn.dataset.type));
+  });
 });
+
 
 function populateZoneSelects() {
   ['fan-zone', 'vol-zone'].forEach(id => {
@@ -48,7 +71,7 @@ function buildQuickAsks() {
     const btn = document.createElement('button');
     btn.className = 'quick-ask-btn';
     btn.textContent = q;
-    btn.onclick = () => sendFanMessage(q);
+    btn.addEventListener('click', () => sendFanMessage(q));
     wrap.appendChild(btn);
   });
 }

@@ -131,7 +131,7 @@ class GeminiClient:
 
 
 @lru_cache(maxsize=CACHE_SIZE)
-def _cached_generate(client_ref: weakref.ReferenceType['GeminiClient'], prompt: str) -> str:
+def _cached_generate(client_ref: weakref.ReferenceType[GeminiClient], prompt: str) -> str:
     """
     Module-level cache for identical (client, prompt) pairs.
 

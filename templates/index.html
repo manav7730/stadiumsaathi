@@ -1,10 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>StadiumSaathi</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="StadiumSaathi — GenAI-powered stadium operations platform for fans, volunteers, and organizers during FIFA World Cup 2026." />
+  <title>StadiumSaathi — Match Day Intelligence</title>
+
+  <meta property="og:title" content="StadiumSaathi — Match Day Intelligence" />
+  <meta property="og:description" content="A GenAI command layer for fans, volunteers, and organizers on match day." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/static/css/style.css" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "StadiumSaathi",
+    "description": "GenAI-enabled smart stadium and tournament operations platform serving fans, volunteers, and organizers",
+    "applicationCategory": "UtilitiesApplication",
+    "offers": { "@type": "Offer", "price": "0" }
+  }
+  </script>
 </head>
 <body>
-    <h1>Welcome to StadiumSaathi</h1>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ── Persona picker (landing) ─────────────────────────────────── -->
+  <div id="landing" role="main" aria-label="StadiumSaathi persona selection">
+    <div class="floodlight" aria-hidden="true"></div>
+    <div class="pitch-lines" aria-hidden="true"></div>
+
+    <div class="landing-inner">
+      <div class="kicker">FIFA WORLD CUP 2026 · MATCH DAY OPS</div>
+      <h1 class="hero-title">Stadium<span class="accent">Saathi</span></h1>
+      <p class="hero-sub">One GenAI command layer. Three views into the same match day.</p>
+
+      <div class="persona-grid" role="list" aria-label="Choose your role">
+        <button class="persona-card" onclick="enterPersona('fan')" role="listitem" aria-label="Enter Fan view">
+          <span class="persona-icon" aria-hidden="true">🎟️</span>
+          <span class="persona-name">Fan</span>
+          <span class="persona-desc">Navigate, ask questions, avoid the crowds</span>
+        </button>
+        <button class="persona-card" onclick="enterPersona('volunteer')" role="listitem" aria-label="Enter Volunteer view">
+          <span class="persona-icon" aria-hidden="true">🦺</span>
+          <span class="persona-name">Volunteer</span>
+          <span class="persona-desc">Report incidents, get instant triage guidance</span>
+        </button>
+        <button class="persona-card" onclick="enterPersona('command')" role="listitem" aria-label="Enter Command Center view">
+          <span class="persona-icon" aria-hidden="true">📡</span>
+          <span class="persona-name">Command Center</span>
+          <span class="persona-desc">Live zone density, AI operational calls</span>
+        </button>
+      </div>
+
+      <p class="scope-note">Crowd density shown is a simulated live feed for demonstration purposes.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       FAN VIEW
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="fan-view" class="persona-view" style="display:none" role="main" aria-label="Fan assistant">
+    <header class="app-header">
+      <button class="back-btn" onclick="goHome()" aria-label="Back to persona selection">← Back</button>
+      <div class="app-title">🎟️ Fan Assistant</div>
+      <div class="header-spacer"></div>
+    </header>
+
+    <main id="main-content" class="fan-layout">
+
+      <!-- Setup -->
+      <section id="fan-setup" aria-label="Fan setup">
+        <div class="setup-card">
+          <h2 class="setup-title">Match Day Check-in</h2>
+          <div class="form-field">
+            <label for="fan-name">Your name</label>
+            <input type="text" id="fan-name" placeholder="Enter your name" maxlength="60" />
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="fan-zone">Your seat zone</label>
+              <select id="fan-zone"></select>
+            </div>
+            <div class="form-field">
+              <label for="fan-lang">Language</label>
+              <select id="fan-lang">
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="es">Español</option>
+                <option value="pt">Português</option>
+                <option value="fr">Français</option>
+                <option value="ar">العربية</option>
+                <option value="de">Deutsch</option>
+                <option value="ja">日本語</option>
+                <option value="ko">한국어</option>
+                <option value="zh">中文</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="startFanSession()">Check In</button>
+        </div>
+      </section>
+
+      <!-- Chat -->
+      <section id="fan-chat" aria-label="Ask Saathi" style="display:none">
+        <div class="zone-banner" id="fan-zone-banner" aria-live="polite"></div>
+
+        <div id="fan-messages" role="log" aria-live="polite" aria-label="Conversation with Saathi"></div>
+
+        <div class="quick-asks" id="fan-quick-asks" aria-label="Quick questions"></div>
+
+        <div class="chat-input-row">
+          <input type="text" id="fan-input" placeholder="Ask Saathi anything..." aria-label="Type your question" />
+          <button class="btn btn-primary" onclick="sendFanMessage()">Send</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       VOLUNTEER VIEW
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="volunteer-view" class="persona-view" style="display:none" role="main" aria-label="Volunteer incident assistant">
+    <header class="app-header">
+      <button class="back-btn" onclick="goHome()" aria-label="Back to persona selection">← Back</button>
+      <div class="app-title">🦺 Volunteer Console</div>
+      <div class="header-spacer"></div>
+    </header>
+
+    <main class="volunteer-layout">
+
+      <section id="volunteer-setup" aria-label="Volunteer setup">
+        <div class="setup-card">
+          <h2 class="setup-title">Staff Sign-in</h2>
+          <div class="form-field">
+            <label for="vol-name">Your name</label>
+            <input type="text" id="vol-name" placeholder="Enter your name" maxlength="60" />
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="vol-role">Role</label>
+              <select id="vol-role">
+                <option>General</option>
+                <option>Medical</option>
+                <option>Security</option>
+                <option>Guest Services</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="vol-zone">Assigned zone</label>
+              <select id="vol-zone"></select>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="startVolunteerSession()">Sign In</button>
+        </div>
+      </section>
+
+      <section id="volunteer-console" aria-label="Incident reporting" style="display:none">
+        <div class="report-card">
+          <h2 class="setup-title">Report an Incident</h2>
+          <div class="incident-type-grid" role="list" aria-label="Incident type">
+            <button class="incident-btn active" data-type="medical" onclick="selectIncidentType('medical')" role="listitem">🚑 Medical</button>
+            <button class="incident-btn" data-type="lost_child" onclick="selectIncidentType('lost_child')" role="listitem">🧒 Lost Child</button>
+            <button class="incident-btn" data-type="overcrowding" onclick="selectIncidentType('overcrowding')" role="listitem">👥 Overcrowding</button>
+            <button class="incident-btn" data-type="security" onclick="selectIncidentType('security')" role="listitem">🛡️ Security</button>
+            <button class="incident-btn" data-type="facility" onclick="selectIncidentType('facility')" role="listitem">🔧 Facility</button>
+            <button class="incident-btn" data-type="other" onclick="selectIncidentType('other')" role="listitem">📋 Other</button>
+          </div>
+          <div class="form-field">
+            <label for="incident-desc">What's happening? (optional details)</label>
+            <textarea id="incident-desc" rows="3" placeholder="Brief description..." maxlength="500"></textarea>
+          </div>
+          <button class="btn btn-primary" onclick="reportIncident()">Get AI Guidance</button>
+        </div>
+
+        <div id="triage-result" aria-live="polite" aria-label="AI triage guidance"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       COMMAND CENTER VIEW
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="command-view" class="persona-view" style="display:none" role="main" aria-label="Command center dashboard">
+    <header class="app-header">
+      <button class="back-btn" onclick="goHome()" aria-label="Back to persona selection">← Back</button>
+      <div class="app-title">📡 Command Center</div>
+      <div class="live-badge" aria-label="Live status indicator">
+        <span class="live-dot" aria-hidden="true"></span> LIVE
+      </div>
+    </header>
+
+    <main class="command-layout">
+      <section class="heatmap-section" aria-label="Zone crowd density heatmap">
+        <h2 class="section-title">Zone Density</h2>
+        <div id="zone-heatmap" role="list" aria-label="Stadium zones with live density"></div>
+      </section>
+
+      <section class="rec-section" aria-label="AI recommendations">
+        <h2 class="section-title">AI Recommendations</h2>
+        <div id="ai-recommendations" aria-live="polite"></div>
+        <button class="btn btn-secondary" onclick="refreshRecommendations()">Refresh Analysis</button>
+      </section>
+
+      <section class="incidents-section" aria-label="Live incident log">
+        <h2 class="section-title">Incident Log</h2>
+        <div id="incident-log" role="list" aria-label="Reported incidents" aria-live="polite"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/static/js/app.js"></script>
 </body>
 </html>
